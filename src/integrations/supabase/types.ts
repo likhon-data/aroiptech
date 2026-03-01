@@ -51,6 +51,7 @@ export type Database = {
           edition: string
           features: Json
           full_specs: Json
+          gallery: Json
           id: string
           image_url: string
           materials: Json
@@ -67,6 +68,7 @@ export type Database = {
           edition?: string
           features?: Json
           full_specs?: Json
+          gallery?: Json
           id?: string
           image_url?: string
           materials?: Json
@@ -83,6 +85,7 @@ export type Database = {
           edition?: string
           features?: Json
           full_specs?: Json
+          gallery?: Json
           id?: string
           image_url?: string
           materials?: Json

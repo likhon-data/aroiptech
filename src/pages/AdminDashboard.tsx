@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useProducts, DBProduct } from "@/hooks/use-products";
 import { useAllSiteContent, SiteContent } from "@/hooks/use-site-content";
 import SEO from "@/components/SEO";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 type Tab = "messages" | "waitlist" | "products" | "content";
 
@@ -28,6 +29,7 @@ const ProductEditor = ({ product, onSave, onCancel }: { product: DBProduct; onSa
   const [fullSpecs, setFullSpecs] = useState(product.full_specs || []);
   const [features, setFeatures] = useState(product.features || []);
   const [materials, setMaterials] = useState(product.materials || []);
+  const [gallery, setGallery] = useState<string[]>(product.gallery || []);
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
 
@@ -42,6 +44,7 @@ const ProductEditor = ({ product, onSave, onCancel }: { product: DBProduct; onSa
       image_url: form.image_url.trim() || "/placeholder.svg", edition: form.edition.trim(),
       status: form.status, price: form.price.trim(), slug: form.slug.trim(),
       specs: specs as any, full_specs: fullSpecs as any, features: features as any, materials: materials as any,
+      gallery: gallery as any,
     }).eq("id", product.id);
     setSaving(false);
     if (error) {
@@ -66,7 +69,6 @@ const ProductEditor = ({ product, onSave, onCancel }: { product: DBProduct; onSa
         <div><label className="text-sm font-medium text-foreground mb-1 block">Name *</label><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={inputClass} /></div>
         <div><label className="text-sm font-medium text-foreground mb-1 block">Tagline</label><input value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} className={inputClass} /></div>
         <div><label className="text-sm font-medium text-foreground mb-1 block">Price *</label><input value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} className={inputClass} /></div>
-        <div><label className="text-sm font-medium text-foreground mb-1 block">Image URL</label><input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className={inputClass} /></div>
         <div><label className="text-sm font-medium text-foreground mb-1 block">Edition</label><input value={form.edition} onChange={(e) => setForm({ ...form, edition: e.target.value })} className={inputClass} /></div>
         <div><label className="text-sm font-medium text-foreground mb-1 block">Status</label>
           <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className={inputClass}>
@@ -77,6 +79,15 @@ const ProductEditor = ({ product, onSave, onCancel }: { product: DBProduct; onSa
       <div><label className="text-sm font-medium text-foreground mb-1 block">Description</label>
         <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} className={inputClass + " resize-none"} />
       </div>
+
+      {/* Image Upload */}
+      <ImageUploader
+        mainImage={form.image_url}
+        gallery={gallery}
+        onMainImageChange={(url) => setForm({ ...form, image_url: url })}
+        onGalleryChange={setGallery}
+        folder={form.slug || "products"}
+      />
 
       {/* Specs (icon + label) */}
       <div className="space-y-2">
@@ -342,6 +353,7 @@ const AdminDashboard = () => {
   const [newFullSpecs, setNewFullSpecs] = useState<{ label: string; value: string }[]>([]);
   const [newFeatures, setNewFeatures] = useState<string[]>([]);
   const [newMaterials, setNewMaterials] = useState<string[]>([]);
+  const [newGallery, setNewGallery] = useState<string[]>([]);
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -404,6 +416,7 @@ const AdminDashboard = () => {
         full_specs: newFullSpecs.filter(s => s.label.trim() || s.value.trim()) as any,
         features: newFeatures.filter(f => f.trim()) as any,
         materials: newMaterials.filter(m => m.trim()) as any,
+        gallery: newGallery as any,
       } as any);
       if (error) {
         if (error.code === "23505") toast({ title: "Slug already exists", description: "Use a unique slug.", variant: "destructive" });
@@ -411,7 +424,7 @@ const AdminDashboard = () => {
       } else {
         toast({ title: "Product added! 🎉" });
         setNewProduct(emptyProduct);
-        setNewSpecs([]); setNewFullSpecs([]); setNewFeatures([]); setNewMaterials([]);
+        setNewSpecs([]); setNewFullSpecs([]); setNewFeatures([]); setNewMaterials([]); setNewGallery([]);
         setShowAddForm(false);
         refetchProducts();
       }
@@ -555,11 +568,19 @@ const AdminDashboard = () => {
                   <div><label className="text-sm font-medium text-foreground mb-1 block">Name *</label><input value={newProduct.name} onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} placeholder="Product Name" maxLength={100} className={inputClass} /></div>
                   <div><label className="text-sm font-medium text-foreground mb-1 block">Tagline</label><input value={newProduct.tagline} onChange={(e) => setNewProduct({ ...newProduct, tagline: e.target.value })} placeholder="Short tagline" maxLength={150} className={inputClass} /></div>
                   <div><label className="text-sm font-medium text-foreground mb-1 block">Price *</label><input value={newProduct.price} onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })} placeholder="$299" maxLength={20} className={inputClass} /></div>
-                  <div><label className="text-sm font-medium text-foreground mb-1 block">Image URL</label><input value={newProduct.image_url} onChange={(e) => setNewProduct({ ...newProduct, image_url: e.target.value })} placeholder="/products/image.png" maxLength={500} className={inputClass} /></div>
                   <div><label className="text-sm font-medium text-foreground mb-1 block">Edition</label><input value={newProduct.edition} onChange={(e) => setNewProduct({ ...newProduct, edition: e.target.value })} placeholder="Limited to 500 units" maxLength={100} className={inputClass} /></div>
                   <div><label className="text-sm font-medium text-foreground mb-1 block">Status</label><select value={newProduct.status} onChange={(e) => setNewProduct({ ...newProduct, status: e.target.value })} className={inputClass}><option value="coming-soon">Coming Soon</option><option value="available">Available</option><option value="sold-out">Sold Out</option></select></div>
                 </div>
                 <div><label className="text-sm font-medium text-foreground mb-1 block">Description</label><textarea value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })} placeholder="Product description..." maxLength={1000} rows={3} className={inputClass + " resize-none"} /></div>
+
+                {/* Image Upload */}
+                <ImageUploader
+                  mainImage={newProduct.image_url}
+                  gallery={newGallery}
+                  onMainImageChange={(url) => setNewProduct({ ...newProduct, image_url: url })}
+                  onGalleryChange={setNewGallery}
+                  folder={newProduct.slug || "new-product"}
+                />
 
                 {/* Specs */}
                 <div className="space-y-2">

@@ -15,6 +15,7 @@ export interface DBProduct {
   full_specs: { label: string; value: string }[];
   features: string[];
   materials: string[];
+  gallery: string[];
   created_at: string;
 }
 
