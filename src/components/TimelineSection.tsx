@@ -3,40 +3,44 @@ import { Leaf, Rocket, Award, Globe, Zap, TreePine } from "lucide-react";
 
 const milestones = [
   {
-    year: "2020",
+    year: "2025",
     icon: Rocket,
     title: "Aroip Founded",
-    desc: "Started with a vision to merge AI hardware with sustainable design in a small garage lab.",
-  },
-  {
-    year: "2021",
-    icon: Leaf,
-    title: "First Bio-Chip Prototype",
-    desc: "Developed our first neural processor using 80% recycled silicon and biodegradable substrates.",
-  },
-  {
-    year: "2022",
-    icon: Award,
-    title: "Green Tech Award",
-    desc: "Recognized by the Global Sustainability Council for innovation in eco-friendly electronics.",
-  },
-  {
-    year: "2023",
-    icon: Globe,
-    title: "Global Expansion",
-    desc: "Partnered with 12+ manufacturers across 3 continents committed to zero-waste production.",
-  },
-  {
-    year: "2024",
-    icon: Zap,
-    title: "40% Energy Reduction",
-    desc: "Our devices achieved 40% lower power consumption compared to industry standards.",
+    desc: "Born from a bold idea — merging AI hardware with sustainable, eco-friendly design from day one.",
   },
   {
     year: "2025",
+    icon: Leaf,
+    title: "Research & Development",
+    desc: "Began developing our first neural processor prototypes using recycled silicon and biodegradable materials.",
+  },
+  {
+    year: "2026",
+    icon: Zap,
+    title: "First Prototype",
+    desc: "Planning to unveil our first bio-chip prototype with ultra-low energy consumption.",
+    upcoming: true,
+  },
+  {
+    year: "2026",
+    icon: Award,
+    title: "Beta Testing",
+    desc: "Opening early access for partners and testers to experience our sustainable smart devices.",
+    upcoming: true,
+  },
+  {
+    year: "2027",
+    icon: Globe,
+    title: "Product Launch",
+    desc: "Official launch of our first line of eco-friendly AI-powered devices to the global market.",
+    upcoming: true,
+  },
+  {
+    year: "2028",
     icon: TreePine,
-    title: "Carbon Neutral Operations",
-    desc: "Reached full carbon neutrality across all manufacturing and shipping operations.",
+    title: "Carbon Neutral Goal",
+    desc: "Targeting full carbon neutrality across all manufacturing and operations.",
+    upcoming: true,
   },
 ];
 
@@ -86,13 +90,20 @@ const TimelineSection = () => {
                 >
                   {/* Content card */}
                   <div className={`ml-14 md:ml-0 md:w-[calc(50%-2rem)] ${isLeft ? "md:pr-0 md:text-right" : "md:pl-0 md:text-left"}`}>
-                    <div className="glass-card rounded-2xl p-6 hover:shadow-lg transition-shadow">
-                      <span
-                        className="text-sm font-semibold text-primary tracking-wider"
-                        style={{ fontFamily: "var(--font-heading)" }}
-                      >
-                        {m.year}
-                      </span>
+                    <div className={`glass-card rounded-2xl p-6 hover:shadow-lg transition-shadow ${m.upcoming ? "border border-dashed border-primary/30" : ""}`}>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="text-sm font-semibold text-primary tracking-wider"
+                          style={{ fontFamily: "var(--font-heading)" }}
+                        >
+                          {m.year}
+                        </span>
+                        {m.upcoming && (
+                          <span className="text-[10px] uppercase tracking-widest bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
+                            Upcoming
+                          </span>
+                        )}
+                      </div>
                       <h3
                         className="text-xl font-bold text-foreground mt-1 mb-2"
                         style={{ fontFamily: "var(--font-heading)" }}
