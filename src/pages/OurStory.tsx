@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import VisionSection from "@/components/VisionSection";
 import TimelineSection from "@/components/TimelineSection";
+import CTASection from "@/components/CTASection";
 import { motion } from "framer-motion";
 import { BookOpen, Users, Lightbulb, Leaf } from "lucide-react";
 
@@ -132,6 +133,9 @@ const OurStory = () => {
 
       {/* Timeline */}
       <TimelineSection />
+
+      {/* Waitlist */}
+      <CTASection />
 
       <Footer />
     </div>
