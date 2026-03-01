@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import { useEffect } from "react";
 
 interface SEOProps {
   title?: string;
@@ -14,26 +14,55 @@ const SEO = ({
   description = "Aroip designs eco-friendly AI hardware and sustainable smart devices built with natural materials for a greener tomorrow.",
   canonical = "https://aroiptech.lovable.app",
   type = "website",
-  image = "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/4b921535-dcfa-45ae-b67c-7129799f06eb/id-preview-1dc193de--b4d234d5-8af0-4db8-8f59-b8eca62d6236.lovable.app-1772344587576.png",
+  image = "",
   jsonLd,
-}: SEOProps) => (
-  <Helmet>
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    <meta property="og:type" content={type} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
-    <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
-    {jsonLd && (
-      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-    )}
-  </Helmet>
-);
+}: SEOProps) => {
+  useEffect(() => {
+    document.title = title;
+
+    const setMeta = (name: string, content: string, isProperty = false) => {
+      const attr = isProperty ? "property" : "name";
+      let el = document.querySelector(`meta[${attr}="${name}"]`) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, name);
+        document.head.appendChild(el);
+      }
+      el.content = content;
+    };
+
+    setMeta("description", description);
+    setMeta("og:title", title, true);
+    setMeta("og:description", description, true);
+    setMeta("og:type", type, true);
+    setMeta("og:url", canonical, true);
+    if (image) setMeta("og:image", image, true);
+    setMeta("twitter:title", title);
+    setMeta("twitter:description", description);
+    if (image) setMeta("twitter:image", image);
+
+    // Canonical
+    let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "canonical";
+      document.head.appendChild(link);
+    }
+    link.href = canonical;
+
+    // JSON-LD
+    const existingScript = document.querySelector('script[data-seo-jsonld]');
+    if (existingScript) existingScript.remove();
+    if (jsonLd) {
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.setAttribute("data-seo-jsonld", "true");
+      script.textContent = JSON.stringify(jsonLd);
+      document.head.appendChild(script);
+    }
+  }, [title, description, canonical, type, image, jsonLd]);
+
+  return null;
+};
 
 export default SEO;
