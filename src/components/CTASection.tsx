@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 const CTASection = () => {
   return (
     <section className="py-24 relative">
-      <div className="container mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
