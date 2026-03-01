@@ -12,9 +12,9 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-4xl"
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4"
     >
-      <div className="glass-card rounded-2xl px-6 py-3 flex items-center justify-between shadow-lg">
+      <div className="glass-card rounded-2xl px-6 py-3 flex items-center justify-between shadow-lg w-full max-w-4xl">
         <a href="#" className="font-heading text-xl font-bold tracking-tight text-foreground">
           ARO<span className="text-gradient">IP</span>
         </a>
