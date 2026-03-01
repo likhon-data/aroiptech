@@ -3,13 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const CTASection = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = email.trim();
     if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
@@ -20,6 +22,24 @@ const CTASection = () => {
       });
       return;
     }
+
+    setLoading(true);
+    const { error } = await supabase
+      .from("waitlist")
+      .insert({ email: trimmed });
+
+    setLoading(false);
+
+    if (error) {
+      if (error.code === "23505") {
+        toast({ title: "Already on the list!", description: "This email is already registered." });
+        setSubmitted(true);
+      } else {
+        toast({ title: "Something went wrong", description: "Please try again later.", variant: "destructive" });
+      }
+      return;
+    }
+
     setSubmitted(true);
   };
 
@@ -72,10 +92,11 @@ const CTASection = () => {
                     />
                     <Button
                       type="submit"
+                      disabled={loading}
                       className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-semibold whitespace-nowrap group rounded-lg"
                     >
-                      Join Waitlist
-                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      {loading ? "Joining..." : "Join Waitlist"}
+                      {!loading && <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />}
                     </Button>
                   </form>
                   <p className="text-primary-foreground/40 text-xs mt-4">
