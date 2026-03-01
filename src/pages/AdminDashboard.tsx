@@ -338,6 +338,10 @@ const AdminDashboard = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProduct, setNewProduct] = useState(emptyProduct);
   const [addingProduct, setAddingProduct] = useState(false);
+  const [newSpecs, setNewSpecs] = useState<{ icon: string; label: string }[]>([]);
+  const [newFullSpecs, setNewFullSpecs] = useState<{ label: string; value: string }[]>([]);
+  const [newFeatures, setNewFeatures] = useState<string[]>([]);
+  const [newMaterials, setNewMaterials] = useState<string[]>([]);
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -395,7 +399,11 @@ const AdminDashboard = () => {
       const { error } = await supabase.from("products").insert({
         slug: slug.trim(), name: name.trim(), tagline: tagline.trim(), description: description.trim(),
         image_url: newProduct.image_url.trim() || "/placeholder.svg", edition: newProduct.edition.trim(),
-        status: newProduct.status, price: price.trim(), specs: [], full_specs: [], features: [], materials: [],
+        status: newProduct.status, price: price.trim(),
+        specs: newSpecs.filter(s => s.icon.trim() || s.label.trim()) as any,
+        full_specs: newFullSpecs.filter(s => s.label.trim() || s.value.trim()) as any,
+        features: newFeatures.filter(f => f.trim()) as any,
+        materials: newMaterials.filter(m => m.trim()) as any,
       } as any);
       if (error) {
         if (error.code === "23505") toast({ title: "Slug already exists", description: "Use a unique slug.", variant: "destructive" });
@@ -403,6 +411,7 @@ const AdminDashboard = () => {
       } else {
         toast({ title: "Product added! 🎉" });
         setNewProduct(emptyProduct);
+        setNewSpecs([]); setNewFullSpecs([]); setNewFeatures([]); setNewMaterials([]);
         setShowAddForm(false);
         refetchProducts();
       }
@@ -539,18 +548,69 @@ const AdminDashboard = () => {
               </Button>
             </div>
             {showAddForm && (
-              <motion.form initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} onSubmit={handleAddProduct} className="glass-card rounded-2xl p-6 space-y-4">
+              <motion.form initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} onSubmit={handleAddProduct} className="glass-card rounded-2xl p-6 space-y-5">
                 <h3 className="font-heading font-bold text-lg text-foreground">New Product</h3>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <div><label className="text-sm font-medium text-foreground mb-1 block">Slug *</label><input value={newProduct.slug} onChange={(e) => setNewProduct({ ...newProduct, slug: e.target.value })} placeholder="my-product" maxLength={100} className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" /></div>
-                  <div><label className="text-sm font-medium text-foreground mb-1 block">Name *</label><input value={newProduct.name} onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} placeholder="Product Name" maxLength={100} className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" /></div>
-                  <div><label className="text-sm font-medium text-foreground mb-1 block">Tagline</label><input value={newProduct.tagline} onChange={(e) => setNewProduct({ ...newProduct, tagline: e.target.value })} placeholder="Short tagline" maxLength={150} className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" /></div>
-                  <div><label className="text-sm font-medium text-foreground mb-1 block">Price *</label><input value={newProduct.price} onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })} placeholder="$299" maxLength={20} className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" /></div>
-                  <div><label className="text-sm font-medium text-foreground mb-1 block">Image URL</label><input value={newProduct.image_url} onChange={(e) => setNewProduct({ ...newProduct, image_url: e.target.value })} placeholder="/products/image.png" maxLength={500} className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" /></div>
-                  <div><label className="text-sm font-medium text-foreground mb-1 block">Edition</label><input value={newProduct.edition} onChange={(e) => setNewProduct({ ...newProduct, edition: e.target.value })} placeholder="Limited to 500 units" maxLength={100} className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" /></div>
-                  <div><label className="text-sm font-medium text-foreground mb-1 block">Status</label><select value={newProduct.status} onChange={(e) => setNewProduct({ ...newProduct, status: e.target.value })} className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"><option value="coming-soon">Coming Soon</option><option value="available">Available</option><option value="sold-out">Sold Out</option></select></div>
+                  <div><label className="text-sm font-medium text-foreground mb-1 block">Slug *</label><input value={newProduct.slug} onChange={(e) => setNewProduct({ ...newProduct, slug: e.target.value })} placeholder="my-product" maxLength={100} className={inputClass} /></div>
+                  <div><label className="text-sm font-medium text-foreground mb-1 block">Name *</label><input value={newProduct.name} onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} placeholder="Product Name" maxLength={100} className={inputClass} /></div>
+                  <div><label className="text-sm font-medium text-foreground mb-1 block">Tagline</label><input value={newProduct.tagline} onChange={(e) => setNewProduct({ ...newProduct, tagline: e.target.value })} placeholder="Short tagline" maxLength={150} className={inputClass} /></div>
+                  <div><label className="text-sm font-medium text-foreground mb-1 block">Price *</label><input value={newProduct.price} onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })} placeholder="$299" maxLength={20} className={inputClass} /></div>
+                  <div><label className="text-sm font-medium text-foreground mb-1 block">Image URL</label><input value={newProduct.image_url} onChange={(e) => setNewProduct({ ...newProduct, image_url: e.target.value })} placeholder="/products/image.png" maxLength={500} className={inputClass} /></div>
+                  <div><label className="text-sm font-medium text-foreground mb-1 block">Edition</label><input value={newProduct.edition} onChange={(e) => setNewProduct({ ...newProduct, edition: e.target.value })} placeholder="Limited to 500 units" maxLength={100} className={inputClass} /></div>
+                  <div><label className="text-sm font-medium text-foreground mb-1 block">Status</label><select value={newProduct.status} onChange={(e) => setNewProduct({ ...newProduct, status: e.target.value })} className={inputClass}><option value="coming-soon">Coming Soon</option><option value="available">Available</option><option value="sold-out">Sold Out</option></select></div>
                 </div>
-                <div><label className="text-sm font-medium text-foreground mb-1 block">Description</label><textarea value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })} placeholder="Product description..." maxLength={1000} rows={3} className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none" /></div>
+                <div><label className="text-sm font-medium text-foreground mb-1 block">Description</label><textarea value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })} placeholder="Product description..." maxLength={1000} rows={3} className={inputClass + " resize-none"} /></div>
+
+                {/* Specs */}
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground block">Specs (icon tags)</label>
+                  {newSpecs.map((s, i) => (
+                    <div key={i} className="flex gap-2 items-center">
+                      <input value={s.icon} onChange={(e) => { const a = [...newSpecs]; a[i] = { ...a[i], icon: e.target.value }; setNewSpecs(a); }} placeholder="Icon (Cpu, Leaf...)" className={inputClass + " w-1/3"} />
+                      <input value={s.label} onChange={(e) => { const a = [...newSpecs]; a[i] = { ...a[i], label: e.target.value }; setNewSpecs(a); }} placeholder="Label" className={inputClass + " flex-1"} />
+                      <Button type="button" variant="ghost" size="sm" onClick={() => setNewSpecs(newSpecs.filter((_, j) => j !== i))}><X className="w-3.5 h-3.5 text-destructive" /></Button>
+                    </div>
+                  ))}
+                  <Button type="button" variant="outline" size="sm" onClick={() => setNewSpecs([...newSpecs, { icon: "", label: "" }])} className="gap-1"><Plus className="w-3 h-3" /> Add Spec</Button>
+                </div>
+
+                {/* Full Specs */}
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground block">Full Specifications</label>
+                  {newFullSpecs.map((s, i) => (
+                    <div key={i} className="flex gap-2 items-center">
+                      <input value={s.label} onChange={(e) => { const a = [...newFullSpecs]; a[i] = { ...a[i], label: e.target.value }; setNewFullSpecs(a); }} placeholder="Label" className={inputClass + " w-1/3"} />
+                      <input value={s.value} onChange={(e) => { const a = [...newFullSpecs]; a[i] = { ...a[i], value: e.target.value }; setNewFullSpecs(a); }} placeholder="Value" className={inputClass + " flex-1"} />
+                      <Button type="button" variant="ghost" size="sm" onClick={() => setNewFullSpecs(newFullSpecs.filter((_, j) => j !== i))}><X className="w-3.5 h-3.5 text-destructive" /></Button>
+                    </div>
+                  ))}
+                  <Button type="button" variant="outline" size="sm" onClick={() => setNewFullSpecs([...newFullSpecs, { label: "", value: "" }])} className="gap-1"><Plus className="w-3 h-3" /> Add Spec</Button>
+                </div>
+
+                {/* Features */}
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground block">Features</label>
+                  {newFeatures.map((f, i) => (
+                    <div key={i} className="flex gap-2">
+                      <input value={f} onChange={(e) => { const a = [...newFeatures]; a[i] = e.target.value; setNewFeatures(a); }} placeholder="Feature description" className={inputClass + " flex-1"} />
+                      <Button type="button" variant="ghost" size="sm" onClick={() => setNewFeatures(newFeatures.filter((_, j) => j !== i))}><X className="w-3.5 h-3.5 text-destructive" /></Button>
+                    </div>
+                  ))}
+                  <Button type="button" variant="outline" size="sm" onClick={() => setNewFeatures([...newFeatures, ""])} className="gap-1"><Plus className="w-3 h-3" /> Add Feature</Button>
+                </div>
+
+                {/* Materials */}
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground block">Materials</label>
+                  {newMaterials.map((m, i) => (
+                    <div key={i} className="flex gap-2">
+                      <input value={m} onChange={(e) => { const a = [...newMaterials]; a[i] = e.target.value; setNewMaterials(a); }} placeholder="Material description" className={inputClass + " flex-1"} />
+                      <Button type="button" variant="ghost" size="sm" onClick={() => setNewMaterials(newMaterials.filter((_, j) => j !== i))}><X className="w-3.5 h-3.5 text-destructive" /></Button>
+                    </div>
+                  ))}
+                  <Button type="button" variant="outline" size="sm" onClick={() => setNewMaterials([...newMaterials, ""])} className="gap-1"><Plus className="w-3 h-3" /> Add Material</Button>
+                </div>
+
                 <Button type="submit" disabled={addingProduct} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg">{addingProduct ? "Adding..." : "Add Product"}</Button>
               </motion.form>
             )}
