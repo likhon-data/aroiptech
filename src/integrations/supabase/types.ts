@@ -44,6 +44,57 @@ export type Database = {
         }
         Relationships: []
       }
+      products: {
+        Row: {
+          created_at: string
+          description: string
+          edition: string
+          features: Json
+          full_specs: Json
+          id: string
+          image_url: string
+          materials: Json
+          name: string
+          price: string
+          slug: string
+          specs: Json
+          status: string
+          tagline: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          edition?: string
+          features?: Json
+          full_specs?: Json
+          id?: string
+          image_url?: string
+          materials?: Json
+          name: string
+          price?: string
+          slug: string
+          specs?: Json
+          status?: string
+          tagline?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          edition?: string
+          features?: Json
+          full_specs?: Json
+          id?: string
+          image_url?: string
+          materials?: Json
+          name?: string
+          price?: string
+          slug?: string
+          specs?: Json
+          status?: string
+          tagline?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
