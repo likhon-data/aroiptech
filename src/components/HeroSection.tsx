@@ -37,7 +37,7 @@ const CountUp = ({ target, suffix, decimals = 0 }: { target: number; suffix: str
   }, [hasStarted, target]);
 
   return (
-    <div ref={ref} className="font-heading text-4xl md:text-5xl font-bold text-foreground">
+    <div ref={ref} className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">
       {decimals > 0 ? count.toFixed(decimals) : Math.floor(count)}{suffix}
     </div>
   );
@@ -95,7 +95,7 @@ const HeroSection = () => {
           </motion.div>
 
           {/* Main heading */}
-          <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight text-foreground mb-8 max-w-4xl">
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold leading-[1.05] tracking-tight text-foreground mb-6 md:mb-8 max-w-4xl px-2">
             <span className="block overflow-hidden">
               <motion.span
                 initial={{ y: "110%" }}
@@ -123,7 +123,7 @@ const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="text-muted-foreground text-base md:text-lg max-w-lg leading-relaxed mb-10 font-body"
+            className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-lg leading-relaxed mb-8 md:mb-10 font-body px-2"
           >
             Premium eco-friendly AI hardware and smart devices built with sustainable materials for a greener tomorrow
           </motion.p>
@@ -133,13 +133,13 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="flex flex-wrap justify-center gap-4 mb-20"
+            className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mb-14 md:mb-20 w-full px-4 sm:px-0"
           >
-            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-body font-semibold text-sm px-8 py-6 rounded-lg group">
+            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-body font-semibold text-sm px-6 sm:px-8 py-5 sm:py-6 rounded-lg group w-full sm:w-auto">
               Explore Collection
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline" className="border-foreground/20 text-foreground hover:bg-secondary font-body font-semibold text-sm px-8 py-6 rounded-lg">
+            <Button size="lg" variant="outline" className="border-foreground/20 text-foreground hover:bg-secondary font-body font-semibold text-sm px-6 sm:px-8 py-5 sm:py-6 rounded-lg w-full sm:w-auto">
               <Play className="mr-2 h-4 w-4" />
               Learn More
             </Button>
@@ -150,7 +150,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.85 }}
-            className="flex gap-12 md:gap-20"
+            className="flex gap-8 sm:gap-12 md:gap-20"
           >
             {statsData.map((stat) => (
               <div key={stat.label} className="text-center">

@@ -35,7 +35,7 @@ const Products = () => {
               <Crown className="w-5 h-5 text-primary" />
             </div>
             <h1
-              className="text-5xl md:text-7xl font-bold text-foreground leading-tight"
+              className="text-4xl sm:text-5xl md:text-7xl font-bold text-foreground leading-tight"
               style={{ fontFamily: "var(--font-heading)" }}
             >
               Our <span className="text-gradient italic">Products</span>

@@ -136,7 +136,7 @@ const ProductDetail = () => {
                 </div>
 
                 <h1
-                  className="text-4xl md:text-5xl font-bold text-foreground leading-tight"
+                  className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight"
                   style={{ fontFamily: "var(--font-heading)" }}
                 >
                   {product.name}
@@ -168,7 +168,7 @@ const ProductDetail = () => {
                   </h3>
                 </div>
                 {product.status !== "sold-out" ? (
-                  <form onSubmit={handlePreOrder} className="flex gap-3">
+                  <form onSubmit={handlePreOrder} className="flex flex-col sm:flex-row gap-3">
                     <input
                       type="email"
                       value={email}
@@ -192,7 +192,7 @@ const ProductDetail = () => {
 
       {/* Detailed Specs, Features, Materials */}
       <section className="py-16 px-6 bg-secondary/20">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Full Specs */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
