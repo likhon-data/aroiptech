@@ -2,12 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Play, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const statsData = [
-  { value: 50, suffix: "+", label: "PRODUCTS" },
-  { value: 100, suffix: "%", label: "SUSTAINABLE" },
-  { value: 500, suffix: "+", label: "HAPPY CLIENTS" },
-];
+import { useSiteContent } from "@/hooks/use-site-content";
 
 const CountUp = ({ target, suffix, decimals = 0 }: { target: number; suffix: string; decimals?: number }) => {
   const [count, setCount] = useState(0);
@@ -54,107 +49,75 @@ const FloatingDots = () => (
   </>
 );
 
-const HeroSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
+// Fallback data
+const defaultData = {
+  badge_text: "Eco-Friendly Smart Technology",
+  since_label: "Since 2025",
+  title_line1: "Smart Devices,",
+  title_line2: "Greener Planet",
+  subtitle: "Premium eco-friendly AI hardware and smart devices built with sustainable materials for a greener tomorrow",
+  cta_primary: "Explore Collection",
+  cta_secondary: "Learn More",
+  stats: [
+    { value: 50, suffix: "+", label: "PRODUCTS" },
+    { value: 100, suffix: "%", label: "SUSTAINABLE" },
+    { value: 500, suffix: "+", label: "HAPPY CLIENTS" },
+  ],
+};
 
+const HeroSection = () => {
+  const { data: content } = useSiteContent("hero");
+  const d = content || defaultData;
+  const statsData = d.stats || defaultData.stats;
+
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   const textY = useTransform(scrollYProgress, [0, 1], [0, -50]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
       <FloatingDots />
-
-
       <div className="max-w-6xl mx-auto px-6 pt-36 md:pt-40 pb-16 relative z-10 w-full">
         <motion.div style={{ y: textY, opacity: contentOpacity }} className="flex flex-col items-center text-center">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-6"
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-6">
             <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-border bg-card text-sm font-body font-medium text-muted-foreground shadow-sm">
               <Leaf className="w-4 h-4 text-primary" />
-              Eco-Friendly Smart Technology
+              {d.badge_text}
             </span>
           </motion.div>
-
-          {/* Since label */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="decorative-line text-xs font-body font-medium tracking-[0.25em] text-muted-foreground uppercase mb-8"
-          >
-            Since 2025
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.2 }} className="decorative-line text-xs font-body font-medium tracking-[0.25em] text-muted-foreground uppercase mb-8">
+            {d.since_label}
           </motion.div>
-
-          {/* Main heading */}
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold leading-[1.05] tracking-tight text-foreground mb-6 md:mb-8 max-w-4xl px-2">
             <span className="block overflow-hidden">
-              <motion.span
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                className="block"
-              >
-                Smart Devices,
+              <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="block">
+                {d.title_line1}
               </motion.span>
             </span>
             <span className="block overflow-hidden">
-              <motion.span
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="block italic"
-              >
-                Greener Planet
+              <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }} className="block italic">
+                {d.title_line2}
               </motion.span>
             </span>
           </h1>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-lg leading-relaxed mb-8 md:mb-10 font-body px-2"
-          >
-            Premium eco-friendly AI hardware and smart devices built with sustainable materials for a greener tomorrow
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.6 }} className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-lg leading-relaxed mb-8 md:mb-10 font-body px-2">
+            {d.subtitle}
           </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.7 }}
-            className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mb-14 md:mb-20 w-full px-4 sm:px-0"
-          >
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.7 }} className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mb-14 md:mb-20 w-full px-4 sm:px-0">
             <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-body font-semibold text-sm px-6 sm:px-8 py-5 sm:py-6 rounded-lg group w-full sm:w-auto">
-              Explore Collection
+              {d.cta_primary}
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button size="lg" variant="outline" className="border-foreground/20 text-foreground hover:bg-secondary font-body font-semibold text-sm px-6 sm:px-8 py-5 sm:py-6 rounded-lg w-full sm:w-auto">
               <Play className="mr-2 h-4 w-4" />
-              Learn More
+              {d.cta_secondary}
             </Button>
           </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.85 }}
-            className="flex gap-8 sm:gap-12 md:gap-20"
-          >
-            {statsData.map((stat) => (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.85 }} className="flex gap-8 sm:gap-12 md:gap-20">
+            {statsData.map((stat: any) => (
               <div key={stat.label} className="text-center">
-                <CountUp target={stat.value} suffix={stat.suffix} />
+                <CountUp target={Number(stat.value)} suffix={stat.suffix} />
                 <div className="text-muted-foreground text-[10px] md:text-xs tracking-[0.2em] font-body font-medium mt-2 uppercase">
                   {stat.label}
                 </div>
