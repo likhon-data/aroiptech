@@ -92,12 +92,34 @@ const HeroSection = () => {
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold leading-[1.05] tracking-tight text-foreground mb-6 md:mb-8 max-w-4xl px-2">
             <span className="block overflow-hidden">
               <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="block">
-                {d.title_line1}
+                {String(d.title_line1).split("").map((char: string, i: number) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, filter: "blur(0px)" }}
+                    transition={{ duration: 0.4, delay: 0.3 + i * 0.04, ease: "easeOut" }}
+                    className="inline-block"
+                    style={{ whiteSpace: char === " " ? "pre" : undefined }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
               </motion.span>
             </span>
             <span className="block overflow-hidden">
               <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }} className="block italic">
-                {d.title_line2}
+                {String(d.title_line2).split("").map((char: string, i: number) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, filter: "blur(0px)" }}
+                    transition={{ duration: 0.4, delay: 0.5 + i * 0.04, ease: "easeOut" }}
+                    className="inline-block"
+                    style={{ whiteSpace: char === " " ? "pre" : undefined }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
               </motion.span>
             </span>
           </h1>
