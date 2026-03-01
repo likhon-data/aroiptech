@@ -102,12 +102,38 @@ const HeroSection = () => {
           style={{ y: textY, opacity }}
           className="text-center max-w-4xl mx-auto mb-6"
         >
-          <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight text-foreground">
-            Hardware
-            <br />
-            <span className="text-gradient">Reimagined</span> for
-            <br />
-            the AI Era
+          <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold leading-[1] tracking-[-0.04em] text-foreground">
+            <span className="block overflow-hidden">
+              <motion.span
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="block"
+              >
+                Hardware
+              </motion.span>
+            </span>
+            <span className="block overflow-hidden">
+              <motion.span
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="block text-gradient"
+                style={{ WebkitBackgroundClip: "text" }}
+              >
+                Reimagined
+              </motion.span>
+            </span>
+            <span className="block overflow-hidden">
+              <motion.span
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="block"
+              >
+                for the <span className="italic font-light text-muted-foreground">AI Era</span>
+              </motion.span>
+            </span>
           </h1>
         </motion.div>
 
