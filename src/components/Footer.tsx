@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="border-t border-border py-12 bg-card">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="flex flex-col items-center gap-8">
           <a href="#" className="flex items-center gap-1.5">
             <Leaf className="w-4 h-4 text-primary" />
             <span className="font-heading text-lg font-bold">
@@ -12,7 +12,7 @@ const Footer = () => {
               <span className="text-primary">IP</span>
             </span>
           </a>
-          <div className="flex items-center gap-8">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8">
             {["Products", "Sustainability", "Our Story", "Careers", "Contact"].map((link) => (
               <a
                 key={link}

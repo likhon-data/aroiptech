@@ -27,7 +27,7 @@ const OurStory = () => {
               <span className="text-sm tracking-[0.3em] uppercase text-muted-foreground">Our Story</span>
             </div>
             <h1
-              className="text-5xl md:text-7xl font-bold text-foreground leading-tight"
+              className="text-4xl sm:text-5xl md:text-7xl font-bold text-foreground leading-tight"
               style={{ fontFamily: "var(--font-heading)" }}
             >
               The <span className="text-gradient italic">Journey</span> Behind Aroip
