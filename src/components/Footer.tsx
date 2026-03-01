@@ -4,14 +4,14 @@ const Footer = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <a href="#" className="font-heading text-xl font-bold text-foreground">
-            ARO<span className="text-primary">IP</span>
+            ARO<span className="text-gradient">IP</span>
           </a>
           <div className="flex items-center gap-8">
             {["Products", "Innovation", "About", "Careers", "Contact"].map((link) => (
               <a
                 key={link}
                 href={`#${link.toLowerCase()}`}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link}
               </a>
