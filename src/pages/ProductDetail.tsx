@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { products, Status } from "@/data/products";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -35,12 +36,8 @@ const ProductDetail = () => {
       <div className="min-h-screen bg-background flex flex-col">
         <Navbar />
         <div className="flex-1 flex items-center justify-center flex-col gap-4 pt-24">
-          <h1 className="text-3xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
-            Product not found
-          </h1>
-          <Button onClick={() => navigate("/products")} variant="outline">
-            Back to Products
-          </Button>
+          <h1 className="text-3xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>Product not found</h1>
+          <Button onClick={() => navigate("/products")} variant="outline">Back to Products</Button>
         </div>
         <Footer />
       </div>
@@ -49,6 +46,14 @@ const ProductDetail = () => {
 
   const status = statusConfig[product.status];
   const StatusIcon = status.icon;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.desc,
+    offers: { "@type": "Offer", price: product.price.replace("$", ""), priceCurrency: "USD", availability: product.status === "available" ? "https://schema.org/InStock" : "https://schema.org/PreOrder" },
+  };
 
   const handlePreOrder = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,9 +64,7 @@ const ProductDetail = () => {
       if (error) {
         if (error.code === "23505") {
           toast({ title: "Already registered!", description: "You're already on the list." });
-        } else {
-          throw error;
-        }
+        } else { throw error; }
       } else {
         toast({ title: "You're on the list! 🎉", description: `We'll notify you when ${product.name} is available.` });
         setEmail("");
@@ -74,6 +77,13 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title={`${product.name} – ${product.tagline} | Aroip`}
+        description={product.desc}
+        canonical={`https://aroiptech.lovable.app/products/${product.slug}`}
+        type="product"
+        jsonLd={jsonLd}
+      />
       <Navbar />
 
       {/* Breadcrumb */}
@@ -94,27 +104,13 @@ const ProductDetail = () => {
             {/* Gallery */}
             <div className="space-y-4">
               <div className="glass-card rounded-2xl p-8 md:p-12 flex items-center justify-center aspect-square bg-secondary/30">
-                <motion.img
-                  key={selectedImage}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  src={product.gallery[selectedImage]}
-                  alt={product.name}
-                  className="w-full max-w-[360px] h-auto object-contain"
-                />
+                <motion.img key={selectedImage} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }}
+                  src={product.gallery[selectedImage]} alt={product.name} className="w-full max-w-[360px] h-auto object-contain" />
               </div>
               <div className="flex gap-3">
                 {product.gallery.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setSelectedImage(i)}
-                    className={`glass-card rounded-xl p-3 flex-1 flex items-center justify-center transition-all duration-200 ${
-                      selectedImage === i
-                        ? "ring-2 ring-primary ring-offset-2 ring-offset-background"
-                        : "opacity-60 hover:opacity-100"
-                    }`}
-                  >
+                  <button key={i} onClick={() => setSelectedImage(i)}
+                    className={`glass-card rounded-xl p-3 flex-1 flex items-center justify-center transition-all duration-200 ${selectedImage === i ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : "opacity-60 hover:opacity-100"}`}>
                     <img src={img} alt={`${product.name} view ${i + 1}`} className="w-full max-w-[80px] h-auto object-contain" />
                   </button>
                 ))}
@@ -126,30 +122,17 @@ const ProductDetail = () => {
               <div>
                 <div className="flex flex-wrap items-center gap-3 mb-3">
                   <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full ${status.className}`}>
-                    <StatusIcon className="w-3.5 h-3.5" />
-                    {status.label}
+                    <StatusIcon className="w-3.5 h-3.5" /> {status.label}
                   </span>
                   <span className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground bg-secondary px-3 py-1 rounded-full">
-                    <Crown className="w-3 h-3" />
-                    {product.edition}
+                    <Crown className="w-3 h-3" /> {product.edition}
                   </span>
                 </div>
-
-                <h1
-                  className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight"
-                  style={{ fontFamily: "var(--font-heading)" }}
-                >
-                  {product.name}
-                </h1>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight" style={{ fontFamily: "var(--font-heading)" }}>{product.name}</h1>
                 <p className="text-primary font-semibold text-lg mt-1">{product.tagline}</p>
-                <p className="text-3xl font-bold text-foreground mt-4" style={{ fontFamily: "var(--font-heading)" }}>
-                  {product.price}
-                </p>
+                <p className="text-3xl font-bold text-foreground mt-4" style={{ fontFamily: "var(--font-heading)" }}>{product.price}</p>
               </div>
-
               <p className="text-muted-foreground leading-relaxed text-base">{product.desc}</p>
-
-              {/* Quick Specs */}
               <div className="flex flex-wrap gap-3">
                 {product.specs.map((spec) => (
                   <div key={spec.label} className="flex items-center gap-2 bg-secondary/60 px-4 py-2.5 rounded-xl">
@@ -158,8 +141,6 @@ const ProductDetail = () => {
                   </div>
                 ))}
               </div>
-
-              {/* Pre-order / Notify Form */}
               <div className="glass-card rounded-2xl p-6 space-y-4">
                 <div className="flex items-center gap-2">
                   <Package className="w-5 h-5 text-primary" />
@@ -169,14 +150,8 @@ const ProductDetail = () => {
                 </div>
                 {product.status !== "sold-out" ? (
                   <form onSubmit={handlePreOrder} className="flex flex-col sm:flex-row gap-3">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="your@email.com"
-                      required
-                      className="flex-1 px-4 py-3 rounded-xl bg-secondary/80 border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    />
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" required
+                      className="flex-1 px-4 py-3 rounded-xl bg-secondary/80 border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
                     <Button type="submit" disabled={submitting} className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold rounded-xl px-6">
                       {submitting ? "..." : product.status === "coming-soon" ? "Notify Me" : "Pre-Order"}
                     </Button>
@@ -193,19 +168,10 @@ const ProductDetail = () => {
       {/* Detailed Specs, Features, Materials */}
       <section className="py-16 px-6 bg-secondary/20">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Full Specs */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="glass-card rounded-2xl p-8"
-          >
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="glass-card rounded-2xl p-8">
             <div className="flex items-center gap-2 mb-6">
               <Crown className="w-5 h-5 text-primary" />
-              <h2 className="text-xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
-                Technical Specs
-              </h2>
+              <h2 className="text-xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>Technical Specs</h2>
             </div>
             <dl className="space-y-4">
               {product.fullSpecs.map((spec) => (
@@ -216,20 +182,10 @@ const ProductDetail = () => {
               ))}
             </dl>
           </motion.div>
-
-          {/* Features */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="glass-card rounded-2xl p-8"
-          >
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="glass-card rounded-2xl p-8">
             <div className="flex items-center gap-2 mb-6">
               <Leaf className="w-5 h-5 text-primary" />
-              <h2 className="text-xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
-                Key Features
-              </h2>
+              <h2 className="text-xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>Key Features</h2>
             </div>
             <ul className="space-y-4">
               {product.features.map((feature, i) => (
@@ -240,20 +196,10 @@ const ProductDetail = () => {
               ))}
             </ul>
           </motion.div>
-
-          {/* Materials */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="glass-card rounded-2xl p-8"
-          >
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="glass-card rounded-2xl p-8">
             <div className="flex items-center gap-2 mb-6">
               <Recycle className="w-5 h-5 text-primary" />
-              <h2 className="text-xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>
-                Eco Materials
-              </h2>
+              <h2 className="text-xl font-bold text-foreground" style={{ fontFamily: "var(--font-heading)" }}>Eco Materials</h2>
             </div>
             <ul className="space-y-4">
               {product.materials.map((mat, i) => (
@@ -272,8 +218,7 @@ const ProductDetail = () => {
         <div className="max-w-6xl mx-auto text-center">
           <Link to="/products">
             <Button variant="outline" className="rounded-xl gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              View All Products
+              <ArrowLeft className="w-4 h-4" /> View All Products
             </Button>
           </Link>
         </div>
