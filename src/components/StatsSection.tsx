@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import { useSiteContent } from "@/hooks/use-site-content";
 
-const stats = [
-  { value: 10000, suffix: "+", label: "Devices Shipped", prefix: "" },
-  { value: 52, suffix: "", label: "Countries Reached", prefix: "" },
-  { value: 99, suffix: "%", label: "Customer Satisfaction", prefix: "" },
-  { value: 85, suffix: "%", label: "Recycled Materials", prefix: "" },
-];
+const defaultData = {
+  items: [
+    { value: 10000, suffix: "+", label: "Devices Shipped", prefix: "" },
+    { value: 52, suffix: "", label: "Countries Reached", prefix: "" },
+    { value: 99, suffix: "%", label: "Customer Satisfaction", prefix: "" },
+    { value: 85, suffix: "%", label: "Recycled Materials", prefix: "" },
+  ],
+};
 
 const AnimatedCounter = ({
   target,
@@ -50,12 +53,15 @@ const AnimatedCounter = ({
 const StatsSection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const { data: content } = useSiteContent("stats");
+  const d = content || defaultData;
+  const stats = d.items || defaultData.items;
 
   return (
     <section ref={ref} className="py-16 bg-background">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
-          {stats.map((stat, i) => (
+          {stats.map((stat: any, i: number) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 30 }}
