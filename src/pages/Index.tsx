@@ -1,8 +1,11 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import PartnersSection from "@/components/PartnersSection";
 import ProductsSection from "@/components/ProductsSection";
+import StatsSection from "@/components/StatsSection";
 import InnovationSection from "@/components/InnovationSection";
 import TechStackSection from "@/components/TechStackSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import VisionSection from "@/components/VisionSection";
 import TimelineSection from "@/components/TimelineSection";
 import CTASection from "@/components/CTASection";
@@ -31,9 +34,12 @@ const Index = () => {
       <SEO jsonLd={jsonLd} />
       <Navbar />
       <HeroSection />
+      <PartnersSection />
       <ProductsSection />
+      <StatsSection />
       <InnovationSection />
       <TechStackSection />
+      <TestimonialsSection />
       <VisionSection />
       <TimelineSection />
       <CTASection />
