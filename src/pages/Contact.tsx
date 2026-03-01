@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import { useSiteContent } from "@/hooks/use-site-content";
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -15,17 +16,19 @@ const fadeUp = {
   transition: { duration: 0.7 },
 };
 
-const contactInfo = [
-  { icon: Mail, label: "Email", value: "hello@aroip.com", href: "mailto:hello@aroip.com" },
-  { icon: Phone, label: "Phone", value: "+1 (800) AROIP-01", href: "tel:+18002764701" },
-  { icon: MapPin, label: "Location", value: "San Francisco, CA", href: "#" },
-];
+const contactIcons: Record<string, any> = { Email: Mail, Phone: Phone, Location: MapPin };
+const socialIcons: Record<string, any> = { Instagram: Instagram, "X (Twitter)": Twitter, LinkedIn: Linkedin, YouTube: Youtube };
 
-const socials = [
-  { icon: Instagram, label: "Instagram", href: "https://instagram.com/aroip" },
-  { icon: Twitter, label: "X (Twitter)", href: "https://x.com/aroip" },
-  { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/company/aroip" },
-  { icon: Youtube, label: "YouTube", href: "https://youtube.com/@aroip" },
+const defaultContactInfo = [
+  { label: "Email", value: "hello@aroip.com", href: "mailto:hello@aroip.com" },
+  { label: "Phone", value: "+1 (800) AROIP-01", href: "tel:+18002764701" },
+  { label: "Location", value: "San Francisco, CA", href: "#" },
+];
+const defaultSocials = [
+  { label: "Instagram", href: "https://instagram.com/aroip" },
+  { label: "X (Twitter)", href: "https://x.com/aroip" },
+  { label: "LinkedIn", href: "https://linkedin.com/company/aroip" },
+  { label: "YouTube", href: "https://youtube.com/@aroip" },
 ];
 
 const Contact = () => {
@@ -33,6 +36,11 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const { toast } = useToast();
+  const { data: content } = useSiteContent("contact");
+  const d = content || {};
+
+  const contactInfo = d.contact_info || defaultContactInfo;
+  const socials = d.socials || defaultSocials;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -51,12 +59,7 @@ const Contact = () => {
     }
     setLoading(true);
     try {
-      const { error } = await supabase.from("contact_messages").insert({
-        name: name.trim(),
-        email: email.trim(),
-        subject: subject.trim(),
-        message: message.trim(),
-      });
+      const { error } = await supabase.from("contact_messages").insert({ name: name.trim(), email: email.trim(), subject: subject.trim(), message: message.trim() });
       if (error) throw error;
       setSent(true);
       toast({ title: "Message sent!", description: "We'll get back to you soon." });
@@ -68,44 +71,27 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO
-        title="Contact Us – Aroip"
-        description="Get in touch with Aroip. Questions, partnerships, or just saying hello — we'd love to hear from you."
-        canonical="https://aroiptech.lovable.app/contact"
-      />
+      <SEO title="Contact Us – Aroip" description="Get in touch with Aroip." canonical="https://aroiptech.lovable.app/contact" />
       <Navbar />
 
-      {/* Hero */}
       <section className="pt-32 pb-16 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <motion.div {...fadeUp}>
-            <span className="text-sm tracking-[0.3em] uppercase text-muted-foreground decorative-line justify-center mb-4">
-              Get In Touch
-            </span>
-            <h1
-              className="text-4xl sm:text-5xl md:text-7xl font-bold text-foreground mt-4 leading-tight"
-              style={{ fontFamily: "var(--font-heading)" }}
-            >
-              Let's <span className="text-gradient italic">Connect</span>
+            <span className="text-sm tracking-[0.3em] uppercase text-muted-foreground decorative-line justify-center mb-4">{d.hero_label || "Get In Touch"}</span>
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-foreground mt-4 leading-tight" style={{ fontFamily: "var(--font-heading)" }}>
+              {d.hero_title || "Let's"} <span className="text-gradient italic">{d.hero_title_highlight || "Connect"}</span>
             </h1>
-            <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mt-6 leading-relaxed">
-              Have a question, partnership idea, or just want to say hello?
-              We'd love to hear from you.
-            </p>
+            <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mt-6 leading-relaxed">{d.hero_description || "Have a question? We'd love to hear from you."}</p>
           </motion.div>
         </div>
       </section>
 
-      {/* Contact Grid */}
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-5 gap-12">
-          {/* Form */}
           <motion.div {...fadeUp} className="lg:col-span-3">
             {!sent ? (
               <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-8 md:p-10 space-y-6">
-                <h2 className="text-2xl font-bold text-foreground mb-2" style={{ fontFamily: "var(--font-heading)" }}>
-                  Send us a message
-                </h2>
+                <h2 className="text-2xl font-bold text-foreground mb-2" style={{ fontFamily: "var(--font-heading)" }}>{d.form_title || "Send us a message"}</h2>
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label className="text-sm font-medium text-foreground mb-1.5 block">Name *</label>
@@ -135,48 +121,47 @@ const Contact = () => {
               </form>
             ) : (
               <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass-card rounded-2xl p-12 text-center">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                  <Mail className="w-8 h-8 text-primary" />
-                </div>
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6"><Mail className="w-8 h-8 text-primary" /></div>
                 <h2 className="text-3xl font-bold text-foreground mb-3" style={{ fontFamily: "var(--font-heading)" }}>Message Sent!</h2>
-                <p className="text-muted-foreground text-lg max-w-md mx-auto">
-                  Thank you for reaching out. Our team will get back to you within 24–48 hours.
-                </p>
-                <Button onClick={() => { setSent(false); setForm({ name: "", email: "", subject: "", message: "" }); }} variant="outline" className="mt-6 rounded-lg">
-                  Send another message
-                </Button>
+                <p className="text-muted-foreground text-lg max-w-md mx-auto">Thank you for reaching out. Our team will get back to you within 24–48 hours.</p>
+                <Button onClick={() => { setSent(false); setForm({ name: "", email: "", subject: "", message: "" }); }} variant="outline" className="mt-6 rounded-lg">Send another message</Button>
               </motion.div>
             )}
           </motion.div>
 
-          {/* Sidebar */}
           <motion.div {...fadeUp} className="lg:col-span-2 space-y-8">
             <div className="glass-card rounded-2xl p-8">
               <h3 className="text-xl font-bold text-foreground mb-6" style={{ fontFamily: "var(--font-heading)" }}>Contact Info</h3>
               <div className="space-y-5">
-                {contactInfo.map((item) => (
-                  <a key={item.label} href={item.href} className="flex items-start gap-4 group">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
-                      <item.icon className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground uppercase tracking-wider">{item.label}</p>
-                      <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{item.value}</p>
-                    </div>
-                  </a>
-                ))}
+                {contactInfo.map((item: any) => {
+                  const Icon = contactIcons[item.label] || Mail;
+                  return (
+                    <a key={item.label} href={item.href} className="flex items-start gap-4 group">
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                        <Icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wider">{item.label}</p>
+                        <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{item.value}</p>
+                      </div>
+                    </a>
+                  );
+                })}
               </div>
             </div>
             <div className="glass-card rounded-2xl p-8">
               <h3 className="text-xl font-bold text-foreground mb-6" style={{ fontFamily: "var(--font-heading)" }}>Follow Us</h3>
               <div className="grid grid-cols-2 gap-3">
-                {socials.map((s) => (
-                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 rounded-xl border border-border hover:bg-primary/5 hover:border-primary/30 transition-colors group">
-                    <s.icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                    <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">{s.label}</span>
-                  </a>
-                ))}
+                {socials.map((s: any) => {
+                  const Icon = socialIcons[s.label] || Instagram;
+                  return (
+                    <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-3 p-3 rounded-xl border border-border hover:bg-primary/5 hover:border-primary/30 transition-colors group">
+                      <Icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                      <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">{s.label}</span>
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </motion.div>
