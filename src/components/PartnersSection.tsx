@@ -1,27 +1,33 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useSiteContent } from "@/hooks/use-site-content";
 
-const partners = [
-  { name: "TechCrunch", logo: "/logos/techcrunch.svg" },
-  { name: "Wired", logo: "/logos/wired.svg" },
-  { name: "The Verge", logo: "/logos/theverge.svg" },
-  { name: "Forbes", logo: "/logos/forbes.svg" },
-  { name: "Bloomberg", logo: "/logos/bloomberg.svg" },
-  { name: "Fast Company", logo: "/logos/fastcompany.svg" },
-  { name: "Engadget", logo: "/logos/engadget.svg" },
-  { name: "Reuters", logo: "/logos/reuters.svg" },
-];
+const defaultData = {
+  label: "As Featured In",
+  items: [
+    { name: "TechCrunch", logo: "/logos/techcrunch.svg" },
+    { name: "Wired", logo: "/logos/wired.svg" },
+    { name: "The Verge", logo: "/logos/theverge.svg" },
+    { name: "Forbes", logo: "/logos/forbes.svg" },
+    { name: "Bloomberg", logo: "/logos/bloomberg.svg" },
+    { name: "Fast Company", logo: "/logos/fastcompany.svg" },
+    { name: "Engadget", logo: "/logos/engadget.svg" },
+    { name: "Reuters", logo: "/logos/reuters.svg" },
+  ],
+};
 
 const PartnersSection = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
+  const { data: content } = useSiteContent("partners");
+  const d = content || defaultData;
+  const partners = d.items || defaultData.items;
 
   return (
     <section ref={ref} className="relative py-16 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.03),transparent_70%)]" />
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -30,14 +36,13 @@ const PartnersSection = () => {
         >
           <div className="h-px flex-1 max-w-[80px] bg-gradient-to-r from-transparent to-border" />
           <p className="text-xs font-body font-semibold text-muted-foreground tracking-[0.25em] uppercase">
-            As Featured In
+            {d.label || defaultData.label}
           </p>
           <div className="h-px flex-1 max-w-[80px] bg-gradient-to-l from-transparent to-border" />
         </motion.div>
 
-        {/* Staggered logo grid on desktop, scroll on mobile */}
         <div className="hidden md:grid grid-cols-4 gap-6">
-          {partners.map((partner, i) => (
+          {partners.map((partner: any, i: number) => (
             <motion.div
               key={partner.name}
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -46,17 +51,11 @@ const PartnersSection = () => {
               whileHover={{ scale: 1.08, y: -4 }}
               className="group flex items-center justify-center rounded-xl border border-transparent hover:border-border hover:bg-card/80 hover:shadow-lg py-8 px-6 transition-colors duration-300 cursor-default"
             >
-              <img
-                src={partner.logo}
-                alt={partner.name}
-                className="h-10 lg:h-12 w-auto max-w-[160px] object-contain grayscale opacity-40 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-400"
-                loading="lazy"
-              />
+              <img src={partner.logo} alt={partner.name} className="h-10 lg:h-12 w-auto max-w-[160px] object-contain grayscale opacity-40 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-400" loading="lazy" />
             </motion.div>
           ))}
         </div>
 
-        {/* Mobile: two-row infinite scroll */}
         <div className="md:hidden space-y-4">
           {[0, 1].map((row) => (
             <div key={row} className="relative overflow-hidden">
@@ -67,17 +66,9 @@ const PartnersSection = () => {
                 animate={{ x: row === 0 ? ["0%", "-50%"] : ["-50%", "0%"] }}
                 transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
               >
-                {[...partners.slice(row * 4, row * 4 + 4), ...partners.slice(row * 4, row * 4 + 4)].map((partner, i) => (
-                  <div
-                    key={i}
-                    className="flex-shrink-0 flex items-center justify-center px-4 py-4"
-                  >
-                    <img
-                      src={partner.logo}
-                      alt={partner.name}
-                      className="h-10 w-auto max-w-[130px] object-contain grayscale opacity-35"
-                      loading="lazy"
-                    />
+                {[...partners.slice(row * 4, row * 4 + 4), ...partners.slice(row * 4, row * 4 + 4)].map((partner: any, i: number) => (
+                  <div key={i} className="flex-shrink-0 flex items-center justify-center px-4 py-4">
+                    <img src={partner.logo} alt={partner.name} className="h-10 w-auto max-w-[130px] object-contain grayscale opacity-35" loading="lazy" />
                   </div>
                 ))}
               </motion.div>
@@ -85,7 +76,6 @@ const PartnersSection = () => {
           ))}
         </div>
 
-        {/* Bottom line */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={inView ? { scaleX: 1 } : {}}
