@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Leaf, LogOut, Mail, Users, Package, Eye, EyeOff, Trash2, Clock, Plus, X, FileText, Save, ChevronDown, ChevronRight } from "lucide-react";
+import { Leaf, LogOut, Mail, Users, Package, Eye, EyeOff, Trash2, Clock, Plus, X, FileText, Save, ChevronDown, ChevronRight, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -19,6 +19,124 @@ interface WaitlistEntry {
 }
 
 const emptyProduct = { slug: "", name: "", tagline: "", description: "", image_url: "", edition: "", status: "coming-soon", price: "" };
+
+const inputClass = "w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30";
+
+const ProductEditor = ({ product, onSave, onCancel }: { product: DBProduct; onSave: () => void; onCancel: () => void }) => {
+  const [form, setForm] = useState({ name: product.name, tagline: product.tagline, description: product.description, image_url: product.image_url, edition: product.edition, status: product.status, price: product.price, slug: product.slug });
+  const [specs, setSpecs] = useState(product.specs || []);
+  const [fullSpecs, setFullSpecs] = useState(product.full_specs || []);
+  const [features, setFeatures] = useState(product.features || []);
+  const [materials, setMaterials] = useState(product.materials || []);
+  const [saving, setSaving] = useState(false);
+  const { toast } = useToast();
+
+  const handleSave = async () => {
+    if (!form.name.trim() || !form.slug.trim() || !form.price.trim()) {
+      toast({ title: "Missing fields", description: "Name, slug, and price are required.", variant: "destructive" });
+      return;
+    }
+    setSaving(true);
+    const { error } = await supabase.from("products").update({
+      name: form.name.trim(), tagline: form.tagline.trim(), description: form.description.trim(),
+      image_url: form.image_url.trim() || "/placeholder.svg", edition: form.edition.trim(),
+      status: form.status, price: form.price.trim(), slug: form.slug.trim(),
+      specs: specs as any, full_specs: fullSpecs as any, features: features as any, materials: materials as any,
+    }).eq("id", product.id);
+    setSaving(false);
+    if (error) {
+      if (error.code === "23505") toast({ title: "Slug already exists", variant: "destructive" });
+      else toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Product updated! ✅" });
+      onSave();
+    }
+  };
+
+  return (
+    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-2xl p-6 space-y-5">
+      <div className="flex items-center justify-between">
+        <h3 className="font-heading font-bold text-lg text-foreground">Edit: {product.name}</h3>
+        <Button variant="ghost" size="sm" onClick={onCancel}><X className="w-4 h-4" /></Button>
+      </div>
+
+      {/* Basic Fields */}
+      <div className="grid sm:grid-cols-2 gap-4">
+        <div><label className="text-sm font-medium text-foreground mb-1 block">Slug *</label><input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} className={inputClass} /></div>
+        <div><label className="text-sm font-medium text-foreground mb-1 block">Name *</label><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={inputClass} /></div>
+        <div><label className="text-sm font-medium text-foreground mb-1 block">Tagline</label><input value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} className={inputClass} /></div>
+        <div><label className="text-sm font-medium text-foreground mb-1 block">Price *</label><input value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} className={inputClass} /></div>
+        <div><label className="text-sm font-medium text-foreground mb-1 block">Image URL</label><input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className={inputClass} /></div>
+        <div><label className="text-sm font-medium text-foreground mb-1 block">Edition</label><input value={form.edition} onChange={(e) => setForm({ ...form, edition: e.target.value })} className={inputClass} /></div>
+        <div><label className="text-sm font-medium text-foreground mb-1 block">Status</label>
+          <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className={inputClass}>
+            <option value="coming-soon">Coming Soon</option><option value="available">Available</option><option value="sold-out">Sold Out</option>
+          </select>
+        </div>
+      </div>
+      <div><label className="text-sm font-medium text-foreground mb-1 block">Description</label>
+        <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} className={inputClass + " resize-none"} />
+      </div>
+
+      {/* Specs (icon + label) */}
+      <div className="space-y-2">
+        <label className="text-sm font-semibold text-foreground block">Specs (icon tags)</label>
+        {specs.map((s, i) => (
+          <div key={i} className="flex gap-2 items-center">
+            <input value={s.icon} onChange={(e) => { const a = [...specs]; a[i] = { ...a[i], icon: e.target.value }; setSpecs(a); }} placeholder="Icon (Cpu, Leaf...)" className={inputClass + " w-1/3"} />
+            <input value={s.label} onChange={(e) => { const a = [...specs]; a[i] = { ...a[i], label: e.target.value }; setSpecs(a); }} placeholder="Label" className={inputClass + " flex-1"} />
+            <Button variant="ghost" size="sm" onClick={() => setSpecs(specs.filter((_, j) => j !== i))}><X className="w-3.5 h-3.5 text-destructive" /></Button>
+          </div>
+        ))}
+        <Button variant="outline" size="sm" onClick={() => setSpecs([...specs, { icon: "", label: "" }])} className="gap-1"><Plus className="w-3 h-3" /> Add Spec</Button>
+      </div>
+
+      {/* Full Specs (label + value) */}
+      <div className="space-y-2">
+        <label className="text-sm font-semibold text-foreground block">Full Specifications</label>
+        {fullSpecs.map((s, i) => (
+          <div key={i} className="flex gap-2 items-center">
+            <input value={s.label} onChange={(e) => { const a = [...fullSpecs]; a[i] = { ...a[i], label: e.target.value }; setFullSpecs(a); }} placeholder="Label" className={inputClass + " w-1/3"} />
+            <input value={s.value} onChange={(e) => { const a = [...fullSpecs]; a[i] = { ...a[i], value: e.target.value }; setFullSpecs(a); }} placeholder="Value" className={inputClass + " flex-1"} />
+            <Button variant="ghost" size="sm" onClick={() => setFullSpecs(fullSpecs.filter((_, j) => j !== i))}><X className="w-3.5 h-3.5 text-destructive" /></Button>
+          </div>
+        ))}
+        <Button variant="outline" size="sm" onClick={() => setFullSpecs([...fullSpecs, { label: "", value: "" }])} className="gap-1"><Plus className="w-3 h-3" /> Add Spec</Button>
+      </div>
+
+      {/* Features */}
+      <div className="space-y-2">
+        <label className="text-sm font-semibold text-foreground block">Features</label>
+        {features.map((f, i) => (
+          <div key={i} className="flex gap-2">
+            <input value={f} onChange={(e) => { const a = [...features]; a[i] = e.target.value; setFeatures(a); }} placeholder="Feature description" className={inputClass + " flex-1"} />
+            <Button variant="ghost" size="sm" onClick={() => setFeatures(features.filter((_, j) => j !== i))}><X className="w-3.5 h-3.5 text-destructive" /></Button>
+          </div>
+        ))}
+        <Button variant="outline" size="sm" onClick={() => setFeatures([...features, ""])} className="gap-1"><Plus className="w-3 h-3" /> Add Feature</Button>
+      </div>
+
+      {/* Materials */}
+      <div className="space-y-2">
+        <label className="text-sm font-semibold text-foreground block">Materials</label>
+        {materials.map((m, i) => (
+          <div key={i} className="flex gap-2">
+            <input value={m} onChange={(e) => { const a = [...materials]; a[i] = e.target.value; setMaterials(a); }} placeholder="Material description" className={inputClass + " flex-1"} />
+            <Button variant="ghost" size="sm" onClick={() => setMaterials(materials.filter((_, j) => j !== i))}><X className="w-3.5 h-3.5 text-destructive" /></Button>
+          </div>
+        ))}
+        <Button variant="outline" size="sm" onClick={() => setMaterials([...materials, ""])} className="gap-1"><Plus className="w-3 h-3" /> Add Material</Button>
+      </div>
+
+      <div className="flex gap-3 pt-2">
+        <Button onClick={handleSave} disabled={saving} className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg gap-2">
+          <Save className="w-4 h-4" /> {saving ? "Saving..." : "Save Changes"}
+        </Button>
+        <Button variant="outline" onClick={onCancel}>Cancel</Button>
+      </div>
+    </motion.div>
+  );
+};
 
 // Friendly labels for content sections
 const sectionLabels: Record<string, string> = {
@@ -220,6 +338,7 @@ const AdminDashboard = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProduct, setNewProduct] = useState(emptyProduct);
   const [addingProduct, setAddingProduct] = useState(false);
+  const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { products, loading: productsLoading, refetch: refetchProducts } = useProducts();
@@ -440,25 +559,34 @@ const AdminDashboard = () => {
             ) : products.length === 0 ? (
               <div className="glass-card rounded-2xl p-12 text-center text-muted-foreground">No products yet. Add your first product!</div>
             ) : (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="space-y-4">
                 {products.map((product) => (
-                  <div key={product.id} className="glass-card rounded-xl p-5">
-                    <div className="flex items-center gap-4 mb-3">
-                      <img src={product.image_url || "/placeholder.svg"} alt={product.name} className="w-16 h-16 object-contain rounded-lg bg-secondary/30 p-1" />
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-foreground text-sm font-heading truncate">{product.name}</h3>
-                        <p className="text-xs text-primary">{product.tagline}</p>
+                  editingProductId === product.id ? (
+                    <ProductEditor key={product.id} product={product} onSave={() => { setEditingProductId(null); refetchProducts(); }} onCancel={() => setEditingProductId(null)} />
+                  ) : (
+                    <div key={product.id} className="glass-card rounded-xl p-5">
+                      <div className="flex items-center gap-4">
+                        <img src={product.image_url || "/placeholder.svg"} alt={product.name} className="w-16 h-16 object-contain rounded-lg bg-secondary/30 p-1" />
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-foreground text-sm font-heading truncate">{product.name}</h3>
+                          <p className="text-xs text-primary">{product.tagline}</p>
+                          <div className="flex items-center gap-3 text-xs mt-1">
+                            <span className="font-bold text-foreground">{product.price}</span>
+                            <span className={`px-2 py-0.5 rounded-full ${product.status === "available" ? "bg-primary/10 text-primary" : product.status === "sold-out" ? "bg-destructive/10 text-destructive" : "bg-accent text-muted-foreground"}`}>{product.status}</span>
+                            <span className="text-muted-foreground">{product.edition}</span>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 shrink-0">
+                          <Button variant="outline" size="sm" onClick={() => setEditingProductId(product.id)} className="gap-1.5">
+                            <Pencil className="w-3.5 h-3.5" /> Edit
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => deleteProduct(product.id, product.name)} className="text-destructive hover:text-destructive hover:bg-destructive/5">
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between text-xs mb-2">
-                      <span className="font-bold text-foreground">{product.price}</span>
-                      <span className={`px-2 py-0.5 rounded-full ${product.status === "available" ? "bg-primary/10 text-primary" : product.status === "sold-out" ? "bg-destructive/10 text-destructive" : "bg-accent text-muted-foreground"}`}>{product.status}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mb-3">{product.edition}</p>
-                    <Button variant="outline" size="sm" onClick={() => deleteProduct(product.id, product.name)} className="w-full text-destructive hover:text-destructive hover:bg-destructive/5 gap-2">
-                      <Trash2 className="w-3.5 h-3.5" /> Delete Product
-                    </Button>
-                  </div>
+                  )
                 ))}
               </div>
             )}
