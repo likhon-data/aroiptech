@@ -1,62 +1,14 @@
 import { motion } from "framer-motion";
 
-const TechCrunchLogo = () => (
-  <svg viewBox="0 0 220 30" fill="currentColor" className="h-5 w-auto">
-    <text x="0" y="24" fontFamily="Arial Black, sans-serif" fontWeight="900" fontSize="24" letterSpacing="-1">TechCrunch</text>
-  </svg>
-);
-
-const WiredLogo = () => (
-  <svg viewBox="0 0 120 30" fill="currentColor" className="h-6 w-auto">
-    <text x="0" y="24" fontFamily="Georgia, serif" fontWeight="400" fontSize="28" fontStyle="italic" letterSpacing="2">WIRED</text>
-  </svg>
-);
-
-const TheVergeLogo = () => (
-  <svg viewBox="0 0 160 30" fill="currentColor" className="h-5 w-auto">
-    <text x="0" y="24" fontFamily="Arial, sans-serif" fontWeight="900" fontSize="22" letterSpacing="1">THE VERGE</text>
-  </svg>
-);
-
-const ForbesLogo = () => (
-  <svg viewBox="0 0 130 30" fill="currentColor" className="h-6 w-auto">
-    <text x="0" y="25" fontFamily="Georgia, serif" fontWeight="700" fontSize="28" fontStyle="italic" letterSpacing="1">Forbes</text>
-  </svg>
-);
-
-const BloombergLogo = () => (
-  <svg viewBox="0 0 200 30" fill="currentColor" className="h-5 w-auto">
-    <text x="0" y="23" fontFamily="'Helvetica Neue', Arial, sans-serif" fontWeight="700" fontSize="22" letterSpacing="2">Bloomberg</text>
-  </svg>
-);
-
-const FastCompanyLogo = () => (
-  <svg viewBox="0 0 220 30" fill="currentColor" className="h-5 w-auto">
-    <text x="0" y="23" fontFamily="'Helvetica Neue', Arial, sans-serif" fontWeight="800" fontSize="20" letterSpacing="0">FAST COMPANY</text>
-  </svg>
-);
-
-const EngadgetLogo = () => (
-  <svg viewBox="0 0 170 30" fill="currentColor" className="h-5 w-auto">
-    <text x="0" y="24" fontFamily="'Helvetica Neue', Arial, sans-serif" fontWeight="700" fontSize="24" letterSpacing="-0.5">engadget</text>
-  </svg>
-);
-
-const MITLogo = () => (
-  <svg viewBox="0 0 240 30" fill="currentColor" className="h-5 w-auto">
-    <text x="0" y="22" fontFamily="'Helvetica Neue', Arial, sans-serif" fontWeight="300" fontSize="18" letterSpacing="1">MIT Technology Review</text>
-  </svg>
-);
-
 const partners = [
-  { name: "TechCrunch", Logo: TechCrunchLogo },
-  { name: "Wired", Logo: WiredLogo },
-  { name: "The Verge", Logo: TheVergeLogo },
-  { name: "Forbes", Logo: ForbesLogo },
-  { name: "Bloomberg", Logo: BloombergLogo },
-  { name: "Fast Company", Logo: FastCompanyLogo },
-  { name: "Engadget", Logo: EngadgetLogo },
-  { name: "MIT Tech Review", Logo: MITLogo },
+  { name: "TechCrunch", logo: "/logos/techcrunch.svg" },
+  { name: "Wired", logo: "/logos/wired.svg" },
+  { name: "The Verge", logo: "/logos/theverge.svg" },
+  { name: "Forbes", logo: "/logos/forbes.svg" },
+  { name: "Bloomberg", logo: "/logos/bloomberg.svg" },
+  { name: "Fast Company", logo: "/logos/fastcompany.svg" },
+  { name: "Engadget", logo: "/logos/engadget.svg" },
+  { name: "Reuters", logo: "/logos/reuters.svg" },
 ];
 
 const PartnersSection = () => {
@@ -77,10 +29,14 @@ const PartnersSection = () => {
             {[...partners, ...partners].map((partner, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 flex items-center justify-center min-w-[140px] text-muted-foreground/35 hover:text-muted-foreground/60 transition-colors duration-300"
-                aria-label={partner.name}
+                className="flex-shrink-0 flex items-center justify-center min-w-[140px] opacity-40 hover:opacity-70 transition-opacity duration-300 grayscale"
               >
-                <partner.Logo />
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  className="h-8 w-auto max-w-[140px] object-contain"
+                  loading="lazy"
+                />
               </div>
             ))}
           </motion.div>
