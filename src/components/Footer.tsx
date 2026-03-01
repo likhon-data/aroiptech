@@ -5,11 +5,12 @@ const Footer = () => {
     <footer className="border-t border-border py-12 bg-card">
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          <a href="#" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-heading font-bold text-xs">A</span>
-            </div>
-            <span className="font-heading text-lg font-bold text-foreground">Aroip</span>
+          <a href="#" className="flex items-center gap-1.5">
+            <Leaf className="w-4 h-4 text-primary" />
+            <span className="font-heading text-lg font-bold">
+              <span className="text-foreground">ARO</span>
+              <span className="text-primary">IP</span>
+            </span>
           </a>
           <div className="flex items-center gap-8">
             {["Products", "Sustainability", "Our Story", "Careers", "Contact"].map((link) => (

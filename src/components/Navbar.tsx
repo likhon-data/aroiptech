@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -16,11 +16,12 @@ const Navbar = () => {
     >
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-heading font-bold text-sm">A</span>
-          </div>
-          <span className="font-heading text-xl font-bold text-foreground">Aroip</span>
+        <a href="#" className="flex items-center gap-1.5">
+          <Leaf className="w-5 h-5 text-primary" />
+          <span className="font-heading text-xl font-bold">
+            <span className="text-foreground">ARO</span>
+            <span className="text-primary">IP</span>
+          </span>
         </a>
 
         {/* Desktop Nav */}
