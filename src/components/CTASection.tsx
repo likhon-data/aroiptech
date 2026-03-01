@@ -44,7 +44,7 @@ const CTASection = () => {
   };
 
   return (
-    <section className="py-24 relative">
+    <section className="py-20 relative">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
           className="rounded-2xl p-12 md:p-16 text-center relative overflow-hidden bg-primary">

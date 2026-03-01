@@ -21,7 +21,7 @@ const InnovationSection = () => {
   const d = content || defaultData;
 
   return (
-    <section id="sustainability" className="py-24 relative bg-card">
+    <section id="sustainability" className="py-20 relative bg-card">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-16">
           <p className="text-xs font-body font-medium tracking-[0.25em] text-primary uppercase mb-4">{d.section_label}</p>

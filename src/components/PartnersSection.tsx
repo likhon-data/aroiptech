@@ -17,7 +17,7 @@ const PartnersSection = () => {
   const inView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <section ref={ref} className="relative py-20 overflow-hidden">
+    <section ref={ref} className="relative py-16 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.03),transparent_70%)]" />
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">

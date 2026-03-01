@@ -27,7 +27,7 @@ const VisionSection = () => {
   const d = content || defaultData;
 
   return (
-    <section id="about" className="py-24 px-6 bg-background">
+    <section id="about" className="py-20 px-6 bg-background">
       <div className="max-w-6xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-16">
           <span className="text-sm tracking-[0.3em] uppercase text-muted-foreground decorative-line justify-center mb-4">{d.section_label}</span>

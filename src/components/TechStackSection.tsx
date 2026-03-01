@@ -12,7 +12,7 @@ const techItems = [
 
 const TechStackSection = () => {
   return (
-    <section id="tech" className="py-24 px-6 bg-secondary/40">
+    <section id="tech" className="py-20 px-6 bg-secondary/40">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

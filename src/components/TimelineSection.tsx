@@ -25,7 +25,7 @@ const TimelineSection = () => {
   const milestones = d.milestones || defaultData.milestones;
 
   return (
-    <section className="py-24 px-6 bg-secondary/30">
+    <section className="py-20 px-6 bg-secondary/30">
       <div className="max-w-5xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-20">
           <span className="text-sm tracking-[0.3em] uppercase text-muted-foreground decorative-line justify-center mb-4">{d.section_label}</span>
