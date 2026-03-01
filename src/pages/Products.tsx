@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTASection from "@/components/CTASection";
-import ecoProduct1 from "@/assets/eco-product-1.png";
-import ecoProduct2 from "@/assets/eco-product-2.png";
-import ecoProduct3 from "@/assets/eco-product-3.png";
-import product1 from "@/assets/product-1.png";
-import product2 from "@/assets/product-2.png";
-import product3 from "@/assets/product-3.png";
+import ecoChipX1 from "@/assets/eco-chip-x1.png";
+import ecoSensePro from "@/assets/eco-sense-pro.png";
+import ecoPadLite from "@/assets/eco-pad-lite.png";
+import ecoLinkBand from "@/assets/eco-link-band.png";
+import ecoStationMini from "@/assets/eco-station-mini.png";
+import ecoVisionGlass from "@/assets/eco-vision-glass.png";
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -31,7 +31,7 @@ const products = [
     name: "AroCore X1",
     tagline: "Neural AI Processor",
     desc: "Our flagship bio-chip featuring recycled silicon architecture with 40% less energy consumption. Each unit is individually numbered.",
-    image: product1,
+    image: ecoChipX1,
     edition: "Limited to 500 units",
     status: "coming-soon" as Status,
     specs: [
@@ -44,7 +44,7 @@ const products = [
     name: "AroSense Pro",
     tagline: "Smart Environment Hub",
     desc: "A biodegradable smart home hub that monitors air quality, energy usage, and connects your eco-friendly devices through green mesh networking.",
-    image: ecoProduct1,
+    image: ecoSensePro,
     edition: "Limited to 1,000 units",
     status: "coming-soon" as Status,
     specs: [
@@ -57,7 +57,7 @@ const products = [
     name: "AroPad Lite",
     tagline: "Sustainable Tablet",
     desc: "A lightweight tablet crafted with bamboo-composite casing and an e-ink hybrid display that lasts weeks on a single charge.",
-    image: product2,
+    image: ecoPadLite,
     edition: "Limited to 750 units",
     status: "coming-soon" as Status,
     specs: [
@@ -70,7 +70,7 @@ const products = [
     name: "AroLink Band",
     tagline: "Eco Fitness Wearable",
     desc: "Health tracking meets sustainability — a fitness band made from ocean-recycled plastics with solar-assisted charging.",
-    image: ecoProduct2,
+    image: ecoLinkBand,
     edition: "Limited to 2,000 units",
     status: "coming-soon" as Status,
     specs: [
@@ -83,7 +83,7 @@ const products = [
     name: "AroStation Mini",
     tagline: "Edge Compute Node",
     desc: "A palm-sized edge computing device for on-device AI processing. Zero cloud dependency, carbon-neutral manufacturing.",
-    image: product3,
+    image: ecoStationMini,
     edition: "Limited to 300 units",
     status: "coming-soon" as Status,
     specs: [
@@ -96,7 +96,7 @@ const products = [
     name: "AroVision Glass",
     tagline: "AR Smart Glasses",
     desc: "Augmented reality glasses with frames made from recycled titanium and plant-based polymers. See the world differently.",
-    image: ecoProduct3,
+    image: ecoVisionGlass,
     edition: "Limited to 200 units",
     status: "coming-soon" as Status,
     specs: [
