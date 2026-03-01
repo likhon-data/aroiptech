@@ -1,37 +1,33 @@
 import { motion } from "framer-motion";
-import { Cpu, Zap, Shield, Globe } from "lucide-react";
+import { Leaf, Recycle, TreePine, Droplets } from "lucide-react";
 
 const features = [
   {
-    icon: Cpu,
-    title: "AI-Native Hardware",
-    description: "Every chip is designed with machine learning at its core, not as an afterthought.",
-    gradient: "from-purple-500 to-blue-500",
+    icon: Leaf,
+    title: "Eco Materials",
+    description: "Every device is built with sustainable bamboo, recycled metals, and bio-plastics.",
   },
   {
-    icon: Zap,
-    title: "Ultra-Low Latency",
-    description: "Edge computing meets precision engineering for real-time responsiveness.",
-    gradient: "from-pink-500 to-orange-500",
+    icon: Recycle,
+    title: "Circular Design",
+    description: "Fully recyclable products designed for disassembly and second life.",
   },
   {
-    icon: Shield,
-    title: "Privacy First",
-    description: "On-device processing ensures your data stays yours. Always.",
-    gradient: "from-cyan-500 to-purple-500",
+    icon: TreePine,
+    title: "Carbon Neutral",
+    description: "We offset every gram of carbon from production to delivery.",
   },
   {
-    icon: Globe,
-    title: "Connected Ecosystem",
-    description: "Seamless interoperability across all Aroip devices and platforms.",
-    gradient: "from-orange-500 to-pink-500",
+    icon: Droplets,
+    title: "Ocean Friendly",
+    description: "Our packaging and select products use recovered ocean-bound plastic.",
   },
 ];
 
 const InnovationSection = () => {
   return (
-    <section id="innovation" className="py-24 relative">
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+    <section id="sustainability" className="py-24 relative bg-card">
+      <div className="max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -39,11 +35,11 @@ const InnovationSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <p className="text-gradient-warm font-heading text-sm font-semibold tracking-[0.2em] uppercase mb-4">
-            Innovation
+          <p className="text-xs font-body font-medium tracking-[0.25em] text-primary uppercase mb-4">
+            Sustainability
           </p>
           <h2 className="font-heading text-4xl md:text-5xl font-bold text-foreground">
-            Engineering the <span className="text-gradient-warm">impossible</span>
+            Technology That <span className="italic">Cares</span>
           </h2>
         </motion.div>
 
@@ -55,15 +51,15 @@ const InnovationSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-card rounded-2xl p-6 border border-border hover:glow-border transition-all duration-500 group"
+              className="bg-background rounded-xl p-6 border border-border hover:shadow-md transition-all duration-500 group text-center"
             >
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-5 shadow-lg`}>
-                <feature.icon className="w-6 h-6 text-primary-foreground" />
+              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-5 mx-auto group-hover:bg-primary/15 transition-colors">
+                <feature.icon className="w-6 h-6 text-primary" />
               </div>
               <h3 className="font-heading text-lg font-bold text-foreground mb-2">
                 {feature.title}
               </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <p className="text-muted-foreground text-sm leading-relaxed font-body">
                 {feature.description}
               </p>
             </motion.div>
