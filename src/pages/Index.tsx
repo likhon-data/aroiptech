@@ -42,6 +42,7 @@ const Index = () => {
       <VisionSection />
       <TimelineSection />
       <TestimonialsSection />
+      <CTASection />
       <Footer />
     </div>
   );
