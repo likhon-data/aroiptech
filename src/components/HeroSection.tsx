@@ -78,7 +78,7 @@ const HeroSection = () => {
       {/* Grid pattern overlay */}
       <div className="absolute inset-0 grid-bg opacity-60" />
 
-      <div className="container mx-auto px-6 pt-28 pb-12 relative z-10">
+      <div className="container mx-auto px-6 pt-36 md:pt-40 pb-12 relative z-10">
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
