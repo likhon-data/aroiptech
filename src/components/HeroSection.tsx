@@ -93,7 +93,7 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="decorative-line text-xs font-body font-medium tracking-[0.25em] text-muted-foreground uppercase mb-8"
           >
-            Since 2024
+            Since 2025
           </motion.div>
 
           {/* Main heading */}
