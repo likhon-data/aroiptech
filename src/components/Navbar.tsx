@@ -2,10 +2,16 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const links = ["Products", "Sustainability", "Our Story", "Contact"];
+  const links = [
+    { label: "Products", href: "/#products" },
+    { label: "About", href: "/about" },
+    { label: "Our Story", href: "/#about" },
+    { label: "Contact", href: "/#contact" },
+  ];
 
   return (
     <motion.nav
@@ -28,11 +34,11 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-8">
           {links.map((link) => (
             <a
-              key={link}
-              href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
+              key={link.label}
+              href={link.href}
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-300 font-body"
             >
-              {link}
+              {link.label}
             </a>
           ))}
         </div>
@@ -58,12 +64,12 @@ const Navbar = () => {
             <div className="px-6 py-4 flex flex-col gap-3">
               {links.map((link) => (
                 <a
-                  key={link}
-                  href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
+                  key={link.label}
+                  href={link.href}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2 font-body"
                   onClick={() => setIsOpen(false)}
                 >
-                  {link}
+                  {link.label}
                 </a>
               ))}
               <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 font-body font-semibold rounded-lg mt-2 w-fit">
