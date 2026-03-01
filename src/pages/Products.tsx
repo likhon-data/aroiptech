@@ -1,15 +1,11 @@
 import { motion } from "framer-motion";
-import { Crown, Leaf, Cpu, Wifi, Battery, Shield, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { Crown, CheckCircle, Clock, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTASection from "@/components/CTASection";
-import ecoChipX1 from "@/assets/eco-chip-x1.png";
-import ecoSensePro from "@/assets/eco-sense-pro.png";
-import ecoPadLite from "@/assets/eco-pad-lite.png";
-import ecoLinkBand from "@/assets/eco-link-band.png";
-import ecoStationMini from "@/assets/eco-station-mini.png";
-import ecoVisionGlass from "@/assets/eco-vision-glass.png";
+import { products, Status } from "@/data/products";
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -18,94 +14,11 @@ const fadeUp = {
   transition: { duration: 0.7 },
 };
 
-type Status = "available" | "coming-soon" | "sold-out";
-
 const statusConfig: Record<Status, { label: string; icon: typeof CheckCircle; className: string }> = {
   "available": { label: "Available", icon: CheckCircle, className: "bg-primary/10 text-primary" },
   "coming-soon": { label: "Coming Soon", icon: Clock, className: "bg-accent text-muted-foreground" },
   "sold-out": { label: "Sold Out", icon: AlertCircle, className: "bg-destructive/10 text-destructive" },
 };
-
-const products = [
-  {
-    name: "AroCore X1",
-    tagline: "Neural AI Processor",
-    desc: "Our flagship bio-chip featuring recycled silicon architecture with 40% less energy consumption. Each unit is individually numbered.",
-    image: ecoChipX1,
-    edition: "Limited to 500 units",
-    status: "coming-soon" as Status,
-    specs: [
-      { icon: Cpu, label: "Neural 8-Core" },
-      { icon: Battery, label: "Ultra Low Power" },
-      { icon: Leaf, label: "95% Recycled" },
-    ],
-  },
-  {
-    name: "AroSense Pro",
-    tagline: "Smart Environment Hub",
-    desc: "A biodegradable smart home hub that monitors air quality, energy usage, and connects your eco-friendly devices through green mesh networking.",
-    image: ecoSensePro,
-    edition: "Limited to 1,000 units",
-    status: "coming-soon" as Status,
-    specs: [
-      { icon: Wifi, label: "Green Mesh" },
-      { icon: Shield, label: "Bio-Secure" },
-      { icon: Leaf, label: "Biodegradable" },
-    ],
-  },
-  {
-    name: "AroPad Lite",
-    tagline: "Sustainable Tablet",
-    desc: "A lightweight tablet crafted with bamboo-composite casing and an e-ink hybrid display that lasts weeks on a single charge.",
-    image: ecoPadLite,
-    edition: "Limited to 750 units",
-    status: "coming-soon" as Status,
-    specs: [
-      { icon: Battery, label: "30-Day Battery" },
-      { icon: Leaf, label: "Bamboo Body" },
-      { icon: Cpu, label: "AroCore Inside" },
-    ],
-  },
-  {
-    name: "AroLink Band",
-    tagline: "Eco Fitness Wearable",
-    desc: "Health tracking meets sustainability — a fitness band made from ocean-recycled plastics with solar-assisted charging.",
-    image: ecoLinkBand,
-    edition: "Limited to 2,000 units",
-    status: "coming-soon" as Status,
-    specs: [
-      { icon: Battery, label: "Solar Charge" },
-      { icon: Shield, label: "Health AI" },
-      { icon: Leaf, label: "Ocean Plastic" },
-    ],
-  },
-  {
-    name: "AroStation Mini",
-    tagline: "Edge Compute Node",
-    desc: "A palm-sized edge computing device for on-device AI processing. Zero cloud dependency, carbon-neutral manufacturing.",
-    image: ecoStationMini,
-    edition: "Limited to 300 units",
-    status: "coming-soon" as Status,
-    specs: [
-      { icon: Cpu, label: "Edge AI" },
-      { icon: Shield, label: "Privacy First" },
-      { icon: Leaf, label: "Carbon Neutral" },
-    ],
-  },
-  {
-    name: "AroVision Glass",
-    tagline: "AR Smart Glasses",
-    desc: "Augmented reality glasses with frames made from recycled titanium and plant-based polymers. See the world differently.",
-    image: ecoVisionGlass,
-    edition: "Limited to 200 units",
-    status: "coming-soon" as Status,
-    specs: [
-      { icon: Cpu, label: "AR Engine" },
-      { icon: Battery, label: "All-Day Use" },
-      { icon: Leaf, label: "Recycled Ti" },
-    ],
-  },
-];
 
 const Products = () => {
   return (
@@ -143,7 +56,7 @@ const Products = () => {
             const StatusIcon = status.icon;
             return (
               <motion.div
-                key={product.name}
+                key={product.slug}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -180,7 +93,8 @@ const Products = () => {
                     >
                       {product.name}
                     </h2>
-                    <p className="text-sm text-primary font-semibold mt-1 mb-3">{product.tagline}</p>
+                    <p className="text-sm text-primary font-semibold mt-1 mb-1">{product.tagline}</p>
+                    <p className="text-xl font-bold text-foreground mb-3" style={{ fontFamily: "var(--font-heading)" }}>{product.price}</p>
                     <p className="text-muted-foreground leading-relaxed mb-6">{product.desc}</p>
 
                     {/* Specs */}
@@ -197,16 +111,15 @@ const Products = () => {
                     </div>
 
                     <div>
-                      <Button
-                        disabled={product.status === "sold-out"}
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold rounded-lg"
-                      >
-                        {product.status === "sold-out"
-                          ? "Sold Out"
-                          : product.status === "coming-soon"
-                          ? "Notify Me"
-                          : "Learn More"}
-                      </Button>
+                      <Link to={`/products/${product.slug}`}>
+                        <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold rounded-lg">
+                          {product.status === "sold-out"
+                            ? "View Details"
+                            : product.status === "coming-soon"
+                            ? "Learn More"
+                            : "Pre-Order Now"}
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 </div>
