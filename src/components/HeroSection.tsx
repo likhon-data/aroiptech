@@ -68,8 +68,6 @@ const HeroSection = () => {
     <section ref={sectionRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
       <FloatingDots />
 
-      {/* Decorative border frame */}
-      <div className="absolute top-24 bottom-24 left-6 md:left-16 right-6 md:right-16 border border-border/50 rounded-lg pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-6 pt-36 md:pt-40 pb-16 relative z-10 w-full">
         <motion.div style={{ y: textY, opacity: contentOpacity }} className="flex flex-col items-center text-center">
