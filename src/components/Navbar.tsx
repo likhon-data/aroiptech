@@ -5,33 +5,38 @@ import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const links = ["Products", "Innovation", "About"];
+  const links = ["Products", "Sustainability", "Our Story", "Contact"];
 
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4"
+      className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border"
     >
-      <div className="glass-card rounded-2xl px-6 py-3 flex items-center justify-between shadow-lg w-full max-w-4xl">
-        <a href="#" className="font-heading text-xl font-bold tracking-tight text-foreground">
-          ARO<span className="text-gradient">IP</span>
+      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <a href="#" className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+            <span className="text-primary-foreground font-heading font-bold text-sm">A</span>
+          </div>
+          <span className="font-heading text-xl font-bold text-foreground">Aroip</span>
         </a>
 
-        <div className="hidden md:flex items-center gap-1">
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
           {links.map((link) => (
             <a
               key={link}
-              href={`#${link.toLowerCase()}`}
-              className="px-4 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all duration-300"
+              href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-300 font-body"
             >
               {link}
             </a>
           ))}
         </div>
 
-        <Button size="sm" className="hidden md:inline-flex bg-gradient-hero text-primary-foreground hover:opacity-90 font-heading font-semibold rounded-xl shadow-md text-xs px-5">
+        <Button size="sm" className="hidden md:inline-flex bg-primary text-primary-foreground hover:bg-primary/90 font-body font-semibold rounded-lg text-xs px-5">
           Contact Us
         </Button>
 
@@ -43,24 +48,24 @@ const Navbar = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -8, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="mt-2 glass-card rounded-2xl shadow-lg overflow-hidden"
+            className="md:hidden border-t border-border bg-background overflow-hidden"
           >
-            <div className="p-4 flex flex-col gap-1">
+            <div className="px-6 py-4 flex flex-col gap-3">
               {links.map((link) => (
                 <a
                   key={link}
-                  href={`#${link.toLowerCase()}`}
-                  className="px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all"
+                  href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2 font-body"
                   onClick={() => setIsOpen(false)}
                 >
                   {link}
                 </a>
               ))}
-              <Button size="sm" className="mt-2 bg-gradient-hero text-primary-foreground hover:opacity-90 font-heading font-semibold rounded-xl">
+              <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 font-body font-semibold rounded-lg mt-2 w-fit">
                 Contact Us
               </Button>
             </div>
