@@ -36,7 +36,7 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title="About Aroip – Premium Eco-Tech Brand" description="Aroip is a premium technology brand proving luxury and sustainability are inseparable." canonical="https://aroiptech.lovable.app/about" />
+      <SEO title="About Aroip – Premium Eco-Tech Brand" description="Aroip is a premium technology brand proving luxury and sustainability are inseparable. Discover our mission, values, and limited edition philosophy." canonical="https://aroip.com/about" keywords="about Aroip, eco-tech brand, sustainable technology company, premium green electronics" />
       <Navbar />
 
       {/* Hero */}

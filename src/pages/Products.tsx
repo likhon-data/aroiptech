@@ -40,7 +40,7 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title="Products – Aroip Limited Edition Eco-Tech" description="Explore Aroip's limited edition sustainable smart devices." canonical="https://aroiptech.lovable.app/products" jsonLd={jsonLd} />
+      <SEO title="Products – Aroip Limited Edition Eco-Tech Devices" description="Explore Aroip's limited edition sustainable smart devices — AI processors, smart hubs, tablets, wearables and more, all built with recycled materials." canonical="https://aroip.com/products" jsonLd={jsonLd} keywords="eco-friendly devices, sustainable electronics, limited edition tech, AI hardware, green smart devices" />
       <Navbar />
 
       <section className="pt-32 pb-16 px-6">

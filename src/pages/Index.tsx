@@ -13,7 +13,8 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Aroip",
-  url: "https://aroiptech.lovable.app",
+  url: "https://aroip.com",
+  logo: "https://aroip.com/favicon.png",
   description: "Premium eco-friendly AI hardware and sustainable smart devices.",
   foundingDate: "2025",
   sameAs: [
