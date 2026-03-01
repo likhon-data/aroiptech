@@ -71,7 +71,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title="Contact Us – Aroip" description="Get in touch with Aroip." canonical="https://aroiptech.lovable.app/contact" />
+      <SEO title="Contact Us – Aroip | Get In Touch" description="Have a question, partnership idea, or feedback? Contact the Aroip team. We'd love to hear from you." canonical="https://aroip.com/contact" keywords="contact Aroip, Aroip support, eco-tech contact, partnership inquiry" />
       <Navbar />
 
       <section className="pt-32 pb-16 px-6">

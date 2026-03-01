@@ -59,7 +59,15 @@ const ProductDetail = () => {
     "@type": "Product",
     name: product.name,
     description: product.description,
-    offers: { "@type": "Offer", price: product.price.replace("$", ""), priceCurrency: "USD" },
+    image: product.image_url,
+    brand: { "@type": "Brand", name: "Aroip" },
+    offers: {
+      "@type": "Offer",
+      price: product.price.replace("$", ""),
+      priceCurrency: "USD",
+      availability: product.status === "available" ? "https://schema.org/InStock" : product.status === "sold-out" ? "https://schema.org/SoldOut" : "https://schema.org/PreOrder",
+      url: `https://aroip.com/products/${product.slug}`,
+    },
   };
 
   const handlePreOrder = async (e: React.FormEvent) => {
@@ -83,7 +91,7 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title={`${product.name} – ${product.tagline} | Aroip`} description={product.description} canonical={`https://aroiptech.lovable.app/products/${product.slug}`} type="product" jsonLd={jsonLd} />
+      <SEO title={`${product.name} – ${product.tagline} | Aroip`} description={product.description} canonical={`https://aroip.com/products/${product.slug}`} type="product" image={product.image_url} jsonLd={jsonLd} keywords={`${product.name}, ${product.tagline}, Aroip, eco-friendly ${product.name}, sustainable electronics`} />
       <Navbar />
 
       <div className="pt-24 pb-4 px-6">

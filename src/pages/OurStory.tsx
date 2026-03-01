@@ -31,7 +31,7 @@ const OurStory = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO title="Our Story – How Aroip Started" description="From a single idea to a movement — discover how Aroip is reshaping the relationship between technology and the planet." canonical="https://aroiptech.lovable.app/our-story" />
+      <SEO title="Our Story – How Aroip Started | Sustainable Tech Journey" description="From a single idea to a movement — discover how Aroip is reshaping the relationship between technology and the planet." canonical="https://aroip.com/our-story" keywords="Aroip story, sustainable tech origin, eco-tech journey, green technology startup" />
       <Navbar />
 
       {/* Hero */}
