@@ -105,7 +105,7 @@ const HeroSection = () => {
                 transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
                 className="block"
               >
-                Crafting Sustainable
+                Smart Devices,
               </motion.span>
             </span>
             <span className="block overflow-hidden">
@@ -115,7 +115,7 @@ const HeroSection = () => {
                 transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="block italic"
               >
-                Technology
+                Greener Planet
               </motion.span>
             </span>
           </h1>
