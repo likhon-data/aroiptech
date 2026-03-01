@@ -45,7 +45,7 @@ const TestimonialsSection = () => {
     setCurrent((c) => (c - 1 + testimonials.length) % testimonials.length);
 
   return (
-    <section className="py-24 bg-card/50 border-y border-border">
+    <section className="py-20 bg-card/50 border-y border-border">
       <div className="max-w-4xl mx-auto px-6">
         <p className="text-center text-sm font-body font-medium text-muted-foreground tracking-widest uppercase mb-3">
           What People Say
